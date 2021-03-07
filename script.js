@@ -11,6 +11,7 @@ function writePassword() {
 
 // get User type of characters selection
 function getUserInput(){
+  //return [10,false,false,false,false]
 first_criteria = prompt("How many characters would you like your password to contain ? (Choose between 8 and 128)")
   if(first_criteria >= 8 && first_criteria < 128){
       var userInput = []
@@ -48,14 +49,28 @@ function checkUserInput(userInput){
 // Generate password
 function generatePassword(){
   userInput = getUserInput()
-  var special_characters = "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/"
-  var lower_case = 'abcdefghijklmnopqrstuvw'
-  var upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  var numeric_characters ="0123456789"
-  for(var i = 1 ; i <= parseInt(userInput[0]);i++){
-    console.log(numeric_characters[2])
+  var characters_type = [
+    "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/",
+    "abcdefghijklmnopqrstuvwxyz",
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "0123456789"
+  ]
+  var temp_password = ""
+  var generated_password = ""
+
+  for(var i = 1 ; i < userInput.length ;i++){
+    if(userInput[i]){
+        temp_password = temp_password + characters_type[i-1]
+    }
   }
-  return userInput[0]
+  
+  for(var i = 0 ; i < parseInt(userInput[0]) ;i++){
+    randomIndex = Math.floor(Math.random()*temp_password.length);
+    generated_password = generated_password + temp_password[randomIndex]
+    console.log(generated_password)
+  }
+
+  return generated_password
 }
 
 
