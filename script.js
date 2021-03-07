@@ -9,8 +9,8 @@ function writePassword() {
   passwordText.value = password;
 }
 
-// User Input
-function userInput(){
+// get User type of characters selection
+function getUserInput(){
 first_criteria = prompt("How many characters would you like your password to contain ? (Choose between 8 and 128)")
   if(first_criteria >= 8 && first_criteria < 128){
       var userInput = []
@@ -21,16 +21,41 @@ first_criteria = prompt("How many characters would you like your password to con
       userInput.push(third_criteria)
       fourth_criteria=confirm("Click Ok to confirm including uppercase characters")
       userInput.push(fourth_criteria)
-      return userInput
+      fifth_criteria=confirm("Click Ok to confirm including numeric characters")
+      userInput.push(fifth_criteria)
+      return checkUserInput(userInput)
   } else {
     alert("Password must be 8 to 127 characters long, Try again!")
   }
 }
+
+// Validate that the user selection
+function checkUserInput(userInput){
+  // if the user selected false to all 2nd, 3rd, 4th and 5th criterias then the system will pick randomly one character type
+  if(!userInput[1] && !userInput[2] && !userInput[3] && !userInput[4]){
+    // generate a random integer excluding 0
+    randomIndex = Math.ceil(Math.random()*(userInput.length-1))
+    // the random integer is used as the index number (from 1 to 4 included) for the userInput array and assign the value true to it
+    userInput[randomIndex] = true
+    console.log(userInput)
+    return  userInput
+  } else {
+    console.log(userInput)
+    return userInput
+  }
+}
+
 // Generate password
 function generatePassword(){
-  userInput = userInput()
+  userInput = getUserInput()
+  var special_characters = "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/"
+  var lower_case = 'abcdefghijklmnopqrstuvw'
+  var upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  var numeric_characters ="0123456789"
+  for(var i = 1 ; i <= parseInt(userInput[0]);i++){
+    console.log(numeric_characters[2])
+  }
   return userInput[0]
-  
 }
 
 
