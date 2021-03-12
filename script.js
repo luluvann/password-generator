@@ -38,35 +38,77 @@ first_criteria = prompt("How many characters would you like your password to con
   }
 }
 
+
+
 // Generate password
 function generatePassword(){
-  userInput = getUserInput()
-  if(userInput == null){
-    return
-  }
-  var characters_type = [
-    "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/",
-    "abcdefghijklmnopqrstuvwxyz",
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "0123456789"
-  ]
-  var temp_password = ""
-  var generated_password = ""
+  var status = false
+  var userInput = getUserInput()
 
-  // Loop through the userInput array at index 1 to 4 and if the criteria was set to True, then the whole string of the available options for the specified characters type will be added to the temp_password variable
-  for(var i = 1 ; i < userInput.length ;i++){
-    if(userInput[i]){
-        temp_password = temp_password + characters_type[i-1]
+  while(!status){
+    if(userInput == null){
+      return
     }
-  }
-  
-  // Generate a random character until reach the password length specified by the user
-  for(var i = 0 ; i < parseInt(userInput[0]) ;i++){
-    randomIndex = Math.floor(Math.random()*temp_password.length);
-    generated_password = generated_password + temp_password[randomIndex]
-  }
-  return generated_password
+    var characters_type = [
+      "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/",
+      "abcdefghijklmnopqrstuvwxyz",
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "0123456789"
+    ]
+    var temp_password = ""
+    var generated_password = ""
+
+    // Loop through the userInput array at index 1 to 4 and if the criteria was set to True, then the whole string of the available options for the specified characters type will be added to the temp_password variable
+    for(var i = 1 ; i < userInput.length ;i++){
+      if(userInput[i]){
+          temp_password = temp_password + characters_type[i-1]
+      }
+    }
+    
+    // Generate a random character until reach the password length specified by the user
+    for(var i = 0 ; i < parseInt(userInput[0]) ;i++){
+      randomIndex = Math.floor(Math.random()*temp_password.length);
+      generated_password = generated_password + temp_password[randomIndex]
+    }
+
+    // Creates an array to identify which characters types the generated password contains - see function "password"
+    var arr = [false,false,false,false]
+
+    for(var i = 0; i < arr.length; i++){
+      arr[i] = password(generated_password,characters_type[i]);
+    }
+
+    // Compare the above array with the userInput array and updates the status. If the status is false, the program will keep generating a new password - see function compareUserInputArr
+    console.log("original password" + compareUserInputArr(userInput,arr) + " " + generated_password)
+    status = compareUserInputArr(userInput,arr)
+    }
+
+    // the generated password that will display on the screen
+    console.log("new password: " + generated_password)
+    return generated_password
+
 }
+
+
+function password(generatedPassword,charactersType){
+  for(var i = 0; i < generatedPassword.length; i++){
+     if(charactersType.includes(generatedPassword[i])){
+         return true
+     }
+  }
+  return false
+}
+
+function compareUserInputArr(userInput,arr){
+  var status = true 
+  for(var i = 1; i < userInput.length; i++){
+      if(userInput[i] !== arr[i-1]){
+          status = false
+      }
+  }
+  return status
+}
+
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
