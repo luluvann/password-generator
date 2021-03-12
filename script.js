@@ -5,15 +5,17 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
+  if(password == null){
+    return
+  }
   passwordText.value = password;
 }
 
-// get User type of characters selection
+// Get and capture user's input and do validation on length and criterias selected
 function getUserInput(){
-  //return [10,false,false,false,false]
+  //return [8,true,true,true,true]
 first_criteria = prompt("How many characters would you like your password to contain ? (Choose between 8 and 128)")
-  if(first_criteria >= 8 && first_criteria < 128){
+  if(first_criteria >= 8 && first_criteria < 129){
       var userInput = []
       userInput.push(first_criteria)
       second_criteria=confirm("Click Ok to confirm including special characters")
@@ -24,31 +26,24 @@ first_criteria = prompt("How many characters would you like your password to con
       userInput.push(fourth_criteria)
       fifth_criteria=confirm("Click Ok to confirm including numeric characters")
       userInput.push(fifth_criteria)
-      return checkUserInput(userInput)
-  } else {
-    alert("Password must be 8 to 127 characters long, Try again!")
-  }
-}
 
-// Validate that the user selection
-function checkUserInput(userInput){
-  // if the user selected false to all 2nd, 3rd, 4th and 5th criterias then the system will pick randomly one character type
-  if(!userInput[1] && !userInput[2] && !userInput[3] && !userInput[4]){
-    // generate a random integer excluding 0
-    randomIndex = Math.ceil(Math.random()*(userInput.length-1))
-    // the random integer is used as the index number (from 1 to 4 included) for the userInput array and assign the value true to it
-    userInput[randomIndex] = true
-    console.log(userInput)
-    return  userInput
+      // Validate userInput, if none of the characters types is selected then reprompt
+      if(!userInput[1] && !userInput[2] && !userInput[3] && !userInput[4]){
+          alert("Please select at least one character type to include!")
+      } else {
+        return userInput
+      }
   } else {
-    console.log(userInput)
-    return userInput
+    alert("Password must be 8 to 128 characters long, Please select a valid Password length!")
   }
 }
 
 // Generate password
 function generatePassword(){
   userInput = getUserInput()
+  if(userInput == null){
+    return
+  }
   var characters_type = [
     "~`!@#$%^&*()_-+={[}]|\:;\"'<,>.?/",
     "abcdefghijklmnopqrstuvwxyz",
@@ -58,21 +53,20 @@ function generatePassword(){
   var temp_password = ""
   var generated_password = ""
 
+  // Loop through the userInput array at index 1 to 4 and if the criteria was set to True, then the whole string of the available options for the specified characters type will be added to the temp_password variable
   for(var i = 1 ; i < userInput.length ;i++){
     if(userInput[i]){
         temp_password = temp_password + characters_type[i-1]
     }
   }
   
+  // Generate a random character until reach the password length specified by the user
   for(var i = 0 ; i < parseInt(userInput[0]) ;i++){
     randomIndex = Math.floor(Math.random()*temp_password.length);
     generated_password = generated_password + temp_password[randomIndex]
-    console.log(generated_password)
   }
-
   return generated_password
 }
-
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
