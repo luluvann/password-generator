@@ -21,3 +21,6 @@ The purpose is to generate a random password based on the criterias specified by
 - DOM
 - HTML
 - CSS
+
+## Roadmap
+- Refactor the code
